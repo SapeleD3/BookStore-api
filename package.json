@@ -1,0 +1,26 @@
+{
+  "name": "BookStore",
+  "version": "1.0.0",
+  "description": "a mini Wattpad for me and my friends",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SapeleD3/BookStore.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SapeleD3/BookStore/issues"
+  },
+  "homepage": "https://github.com/SapeleD3/BookStore#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.1",
+    "nodemon": "^1.19.2"
+  }
+}
