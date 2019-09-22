@@ -2,9 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose')
 const app = express()
 
+const auth = require('./routes/auth')
+
 app.get('/', (req, res) => {
     res.send('Hello World')
 })
+
+app.use('/auth', auth)
 
 
 
