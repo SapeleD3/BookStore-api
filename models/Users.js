@@ -19,4 +19,6 @@ const UserSchema = new Schema({
     image: {
         type: String
     }
-})
+});
+
+mongoose.model('users', UserSchema);
