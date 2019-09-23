@@ -8,7 +8,7 @@ module.exports = function (passport) {
         new GoogleStrategy({
             clientID: keys.googleClientID,
             clientSecret: keys.googleClientSecret,
-            callbackURL: '/auth/google/callback',
+            callbackURL: "https://safe-tor-86934.herokuapp.com/auth/google/callback",
             proxy: true
         }, (accessToken, refreshToken, profile, done) => {
             console.log(accessToken);
