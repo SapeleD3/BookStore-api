@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose')
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
 
 
 const app = express();
@@ -7,6 +9,7 @@ const app = express();
 
 const passport = require('passport')
 const keys = require('./config/keys')
+const auth = require('./routes/auth')
 
 require('./models/Users')
 
@@ -14,22 +17,29 @@ mongoose.Promise = global.Promise;
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
+//routes
+app.use('/auth', auth)
+
+//middleware
+app.use(cookieParser());
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false
+}));
+
 
 //passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 require('./config/passport')(passport)
 
-
-
-const auth = require('./routes/auth')
 
 app.get('/', (req, res) => {
     res.send('Hello World')
 })
-
-app.use('/auth', auth)
 
 
 const port = process.env.PORT || 6536
