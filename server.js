@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
 })
 
 
-const port = process.env.PORT || 6536
+const port = process.env.PORT || 6530
 app.listen(port, () => {
     console.log(`App is Running on Port: ${port}`)
 })
