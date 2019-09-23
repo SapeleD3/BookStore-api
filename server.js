@@ -17,9 +17,6 @@ mongoose.Promise = global.Promise;
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
-//routes
-app.use('/auth', auth)
-
 //middleware
 app.use(cookieParser());
 app.use(session({
@@ -33,8 +30,17 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+//set global variables
+app.use((req, res, next) => {
+    res.locals.user = req.user || null;
+    next();
+})
+
 
 require('./config/passport')(passport)
+
+//routes
+app.use('/auth', auth)
 
 
 app.get('/', (req, res) => {
