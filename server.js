@@ -21,7 +21,6 @@ app.get('/', (req, res) => {
 app.use('/auth', auth)
 
 
-
 const port = process.env.PORT || 6536
 app.listen(port, () => {
     console.log(`App is Running on Port: ${port}`)
