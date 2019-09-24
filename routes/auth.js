@@ -7,8 +7,14 @@ router.get('/google', passport.authenticate('google', { scope: ['https://www.goo
 router.get('/google/callback',
     passport.authenticate('google', { failureRedirect: '/' }),
     (req, res) => {
+        let user = req.user;
+        const token = req.authInfo.token;
         // Successful authentication, redirect home.
-        res.status('200').json('you are logged in');
+        res.redirect('/')
+        // res.status(200).json({
+        //     user,
+        //     token
+        // })
     }
 );
 

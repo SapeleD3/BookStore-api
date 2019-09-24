@@ -14,7 +14,7 @@ module.exports = function (passport) {
             callbackURL: "/auth/google/callback",
             proxy: true
         }, (accessToken, refreshToken, profile, done) => {
-            // console.log(accessToken);
+            console.log('3', accessToken);
             // console.log(profile);
 
             const image = profile.photos[0].value;
@@ -25,17 +25,22 @@ module.exports = function (passport) {
                 lastName: profile.name.familyName,
                 image: image
             }
+            const usertoken = { token: accessToken }
 
             //check for oldUser
             User.findOne({
                 googleID: profile.id
             }).then(user => {
                 if (user) {
-                    done(null, user)
+                    done(null, user, usertoken)
+                    console.log('2', user, usertoken)
                 } else {
                     new User(newUser)
                         .save()
-                        .then(user => done(null, user))
+                        .then(user => {
+                            console.log('1', user)
+                            done(null, user, usertoken)
+                        })
                 }
             })
         })

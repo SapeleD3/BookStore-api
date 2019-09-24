@@ -2,10 +2,12 @@ const express = require('express');
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
+const cors = require('cors')
 
 
 const app = express();
 
+app.use(cors());
 
 const passport = require('passport')
 const keys = require('./config/keys')
@@ -33,6 +35,7 @@ app.use(passport.session());
 //set global variables
 app.use((req, res, next) => {
     res.locals.user = req.user || null;
+    res.locals.usertoken = req.usertoken || null;
     next();
 })
 
@@ -48,7 +51,7 @@ app.get('/', (req, res) => {
 })
 
 
-const port = process.env.PORT || 6530
+const port = process.env.PORT || 6536
 app.listen(port, () => {
     console.log(`App is Running on Port: ${port}`)
 })
