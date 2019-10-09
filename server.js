@@ -1,57 +1,53 @@
-const express = require('express');
-const mongoose = require('mongoose')
-const cookieParser = require('cookie-parser')
-const session = require('express-session')
-const cors = require('cors')
+//imports
+const express = require('express')
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
-
-const app = express();
-
-app.use(cors());
-
-const passport = require('passport')
 const keys = require('./config/keys')
-const auth = require('./routes/auth')
 
-require('./models/Users')
+//initializing app for express
+const app = express();
+//import Routes
+const userRoutes = require('./routes/user');
 
-mongoose.Promise = global.Promise;
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log(err));
-//middleware
-app.use(cookieParser());
-app.use(session({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: false
-}));
+//connect to db
+const mongo = process.env.MONGO_URI || keys.mongoURI
 
+mongoose.connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('connected to mongodb Database'))
+    .catch(err => console.log(`could not connect to database: ${err}`))
 
-//passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
+//middlewares
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-//set global variables
+//middleware to protect against cors errors
 app.use((req, res, next) => {
-    res.locals.user = req.user || null;
-    res.locals.usertoken = req.usertoken || null;
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With, Content-Type, Accept, Authorization')
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+        res.status(200).json({});
+    }
     next();
-})
+});
 
-
-require('./config/passport')(passport)
-
-//routes
-app.use('/auth', auth)
-
-
+//Routes
 app.get('/', (req, res) => {
-    res.send('Hello World')
+    res.status(200).send('HELLO WORLD')
+});
+app.use('/user', userRoutes)
+
+//Error Handlers
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.json({
+        error: {
+            message: error.message
+        }
+    })
 })
 
-
-const port = process.env.PORT || 6536
-app.listen(port, () => {
-    console.log(`App is Running on Port: ${port}`)
-})
+//Server Listener
+const port = process.env.PORT || 1234
+app.listen(port, () => console.log(`Server running on port ${port} 🔥`));
