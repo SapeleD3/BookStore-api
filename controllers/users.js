@@ -23,7 +23,7 @@ exports.getUsers = (req, res) => {
 
 exports.getUserByid = (req, res) => {
     const id = req.params.id
-    User.findById({ "local._id": id })
+    User.findById({"_id": id})
         .exec()
         .then(user => {
             res.status(200).json({
@@ -83,7 +83,8 @@ exports.registerUser = (req, res) => {
                             .then(resp => {
                                 const token = jwt.sign({
                                     email: resp.email,
-                                    userId: resp._id
+                                    userId: resp._id,
+                                    image: resp.image
                                 },
                                     'Slugterra5',
                                     {
@@ -125,7 +126,8 @@ exports.loginUsers = (req, res) => {
                 if (result) {
                     const token = jwt.sign({
                         email: user[0].email,
-                        userId: user[0]._id
+                        userId: user[0]._id,
+                        image: user[0].image
                     },
                         'Slugterra5',
                         {
@@ -162,4 +164,24 @@ exports.googleOauth = (req, res) => {
     res.status(200).json({
         token
     })
+}
+
+exports.getOwnCredentials = async (req, res) => {
+    const user = await req.userData.userId
+    await User.findOne({ "google.id": user}).exec()
+    .then(user => {
+        if(user){
+            console.log(user)
+            res.status(200).json({
+                message: 'User Fetch successful',
+                userData: user
+            })
+        } else {
+            res.status(404).json({error: 'Unauthorized'})
+        }
+    })
+    .catch(err => {
+        res.status(500).json({error: err})
+    })
+    
 }

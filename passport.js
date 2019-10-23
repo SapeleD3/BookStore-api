@@ -25,7 +25,8 @@ passport.use('googleToken', new gpts({
             google: {
                 id: profile.id,
                 email: profile.emails[0].value,
-
+                image: profile.photos[0].value,
+                name: profile.name.familyName
             }
         });
 

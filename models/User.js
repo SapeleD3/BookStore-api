@@ -30,6 +30,9 @@ const userSchema = Schema({
         },
         name: {
             type: String
+        },
+        image: {
+            type: String
         }
     }
 

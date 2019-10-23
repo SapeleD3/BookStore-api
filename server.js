@@ -11,7 +11,7 @@ const app = express();
 const userRoutes = require('./routes/user');
 
 //connect to db
-const mongo = process.env.MONGO_URI || keys.mongoURI
+const mongo = keys.mongoURI
 
 mongoose.connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('connected to mongodb Database'))
