@@ -9,7 +9,7 @@ const keys = require('./config/keys')
 const app = express();
 //import Routes
 const userRoutes = require('./routes/user');
-
+const storyRoutes = require('./routes/stories')
 //connect to db
 const mongo = keys.mongoURI
 
@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //middleware to protect against cors errors
-app.use((req, res, next) => {
+app.use((req, res, next) =>  {
     res.header('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With, Content-Type, Accept, Authorization')
     if (req.method === 'OPTIONS') {
@@ -37,6 +37,7 @@ app.get('/', (req, res) => {
     res.status(200).send('HELLO WORLD')
 });
 app.use('/user', userRoutes)
+app.use('/stories', storyRoutes)
 
 //Error Handlers
 app.use((error, req, res, next) => {

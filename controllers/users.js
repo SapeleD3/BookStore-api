@@ -153,17 +153,19 @@ exports.loginUsers = (req, res) => {
 
 exports.googleOauth = (req, res) => {
     const token = jwt.sign({
+        id: req.user.id,
         email: req.user.google.email,
         userId: req.user.google.id
     },
         'Slugterra5',
         {
-            expiresIn: new Date().setDate(new Date().getDate() + 1)
+            expiresIn: '2h'
         }
     );
     res.status(200).json({
         token
     })
+    console.log(token)
 }
 
 exports.getOwnCredentials = async (req, res) => {
@@ -171,11 +173,13 @@ exports.getOwnCredentials = async (req, res) => {
     await User.findOne({ "google.id": user}).exec()
     .then(user => {
         if(user){
-            console.log(user)
+            
+            req.user = user.google
             res.status(200).json({
                 message: 'User Fetch successful',
                 userData: user.google
             })
+            console.log(req.user)
         } else {
             res.status(404).json({error: 'Unauthorized'})
         }
