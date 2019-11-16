@@ -170,6 +170,7 @@ exports.googleOauth = (req, res) => {
 
 exports.getOwnCredentials = async (req, res) => {
     const user = await req.userData.userId
+    console.log('owner',req.user)
     await User.findOne({ "google.id": user}).exec()
     .then(user => {
         if(user){
